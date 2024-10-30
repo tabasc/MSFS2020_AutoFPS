@@ -443,22 +443,48 @@ namespace MSFS2020_AutoFPS
                 if (!Model.UseExpertOptions || Model.CustomAutoOLOD[Model.activeProfile])
                 {
                     float newOLOD;
-                    if (Model.altAboveGnd < Model.AltOLODBase[Model.activeProfile]) newOLOD = Model.activeOLODAtBase;
-                    else if (Model.altAboveGnd > Model.AltOLODTop[Model.activeProfile]) newOLOD = Model.activeOLODAtTop;
+                    float midOLOD = (Model.activeOLODAtBase + Model.activeOLODAtTop) / 2; // Define the mid OLOD
+                
+                    if (Model.altAboveGnd < Model.AltOLODBase[Model.activeProfile]) 
+                    {
+                        newOLOD = Model.activeOLODAtBase;
+                    }
+                    else if (Model.altAboveGnd > Model.AltOLODTop[Model.activeProfile]) 
+                    {
+                        newOLOD = Model.activeOLODAtTop;
+                    }
+                    else if (Model.altAboveGnd < (Model.AltOLODBase[Model.activeProfile] + Model.AltOLODTop[Model.activeProfile]) / 2)
+                    {
+                        // Between base and mid
+                        newOLOD = Model.activeOLODAtBase + (midOLOD - Model.activeOLODAtBase) * (Model.altAboveGnd - Model.AltOLODBase[Model.activeProfile]) / ((Model.AltOLODBase[Model.activeProfile] + Model.AltOLODTop[Model.activeProfile]) / 2 - Model.AltOLODBase[Model.activeProfile]);
+                    }
+                    else if (Model.altAboveGnd > (Model.AltOLODBase[Model.activeProfile] + Model.AltOLODTop[Model.activeProfile]) / 2)
+                    {
+                        // Between mid and top
+                        newOLOD = midOLOD + (Model.activeOLODAtTop - midOLOD) * (Model.altAboveGnd - (Model.AltOLODBase[Model.activeProfile] + Model.AltOLODTop[Model.activeProfile]) / 2) / (Model.AltOLODTop[Model.activeProfile] - (Model.AltOLODBase[Model.activeProfile] + Model.AltOLODTop[Model.activeProfile]) / 2);
+                    }
                     else
                     {
-                        newOLOD = Model.activeOLODAtBase + (Model.activeOLODAtTop - Model.activeOLODAtBase) * (Model.altAboveGnd - Model.AltOLODBase[Model.activeProfile]) / (Model.AltOLODTop[Model.activeProfile] - Model.AltOLODBase[Model.activeProfile]);
-                        if (Math.Abs(newOLOD - Model.olod) < Model.FPSTolerance[Model.activeProfile]) newOLOD = Model.olod;
-                        else if (Math.Abs(newOLOD - Model.olod) > Model.FPSTolerance[Model.activeProfile] * 2) newOLOD = Model.olod + Math.Sign(newOLOD - Model.olod) * Model.FPSTolerance[Model.activeProfile] * 2;
-                        else newOLOD = Model.olod + Math.Sign(newOLOD - Model.olod) * Model.FPSTolerance[Model.activeProfile];
+                        // At mid
+                        newOLOD = midOLOD;
                     }
+                
+                    if (Math.Abs(newOLOD - Model.olod) < Model.FPSTolerance[Model.activeProfile]) 
+                        newOLOD = Model.olod;
+                    else if (Math.Abs(newOLOD - Model.olod) > Model.FPSTolerance[Model.activeProfile] * 2) 
+                        newOLOD = Model.olod + Math.Sign(newOLOD - Model.olod) * Model.FPSTolerance[Model.activeProfile] * 2;
+                    else 
+                        newOLOD = Model.olod + Math.Sign(newOLOD - Model.olod) * Model.FPSTolerance[Model.activeProfile];
+                
                     if (newOLOD != Model.olod && Math.Abs(newOLOD - Model.olod) >= 1)
                     {
                         Model.MemoryAccess.SetOLOD(Model.olod = newOLOD);
                         Model.olod_step = true;
                     }
-                    else Model.olod_step = false;
+                    else 
+                        Model.olod_step = false;
                 }
+
                 else
                 {
                     Model.olod_step = true;
@@ -526,6 +552,7 @@ namespace MSFS2020_AutoFPS
                 MinTLODNoExtra = Model.MinTLOD[Model.activeProfile];
                 AltTLODBase = Model.AltTLODBase[Model.activeProfile];
                 Model.activeOLODAtBase = Model.OLODAtBase[Model.activeProfile];
+                Model.activeOLODAtMid = Model.OLODAtMid[Model.activeProfile];
                 Model.activeOLODAtTop = Model.OLODAtTop[Model.activeProfile];
             }
             else
