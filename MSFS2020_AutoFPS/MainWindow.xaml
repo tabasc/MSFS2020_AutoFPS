@@ -221,8 +221,10 @@
                                     <TextBox x:Name="txtOLODAtTop" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="5,0,0,0" Background="#7FFFFFFF"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                    <Label Content="Alt OLOD Base" MinWidth="108"/>
+                                    <Label Content="Alt OLOD Base" MinWidth="50"/>
                                     <TextBox Name="txtAltOLODBase" ToolTip ="OLOD @ Base will be locked below this altitude" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="0,0,0,0" Background="#7FFFFFFF"/>
+                                    <Label Content="ft" Margin="0,0,12,0"/>
+                                    <TextBox Name="txtAltOLODMid" ToolTip ="OLOD @ Mid defines an OLOD halfway between base and top altitudes." VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="0,0,0,0" Background="#7FFFFFFF"/>
                                     <Label Content="ft" Margin="0,0,12,0"/>
                                     <Label Content="Alt OLOD Top" MinWidth="100"/>
                                     <TextBox x:Name="txtAltOLODTop" ToolTip ="OLOD @ top will be locked above this altitude" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="5,0,0,0" Background="#7FFFFFFF"/>
